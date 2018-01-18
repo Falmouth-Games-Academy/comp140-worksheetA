@@ -5,6 +5,7 @@
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+int i;
 
 int main()
 {
@@ -39,6 +40,37 @@ int main()
 	}
 
 	// TODO: implement the rest of the game
-
+	int intLives = 4;
+	int intNumRight;
+	std::string strGuess;
+	while (intLives > 0)
+	{
+		std::cout << "Enter your guess you have "<< intLives << " guesses left" << std::endl;
+		std::cin >> strGuess;
+		if (strGuess == secret)
+		{
+			std::cout << "You win!" << std::endl;
+			std::cin.ignore();
+			break;
+		}
+		else
+		{
+			intNumRight = 0;
+			for (i = 0; i<(wordLength-1); i++) {
+				if (secret[i] == strGuess[i])
+				{
+					intNumRight++;
+				}
+			}
+			std::cout << "Incorrect " << intNumRight << "/" << wordLength <<std::endl;
+			intLives--;
+			if (intLives == 0)
+			{
+				std::cout << "You Loose" << std::endl;
+				std::cin.ignore();
+			}
+		}
+	}
+	std::cin.ignore();
 	return 0;
 }
