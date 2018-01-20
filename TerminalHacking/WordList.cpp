@@ -49,3 +49,19 @@ std::string WordList::getRandomWord()
 	int index = rand() % words.size();
 	return words[index];
 }
+
+/*
+	Takes in a string and looks through words to see if it exists
+	Returns boolean for whether the word is found or not
+*/
+bool WordList::containsWord(std::string word)
+{
+	for (unsigned int i = 0; i < words.size(); i++)
+	{
+		if (words[i] == word)
+		{
+			return true;
+		}
+	}
+	return false;
+}

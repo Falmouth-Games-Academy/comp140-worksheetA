@@ -5,6 +5,26 @@
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+const int startingLives = 4;
+
+/*
+	Takes the secret word and the gussed word.
+	Returns the number of letters which line up.
+*/
+int getLiknessScore(std::string secret, std::string guess)
+{
+	int score = 0;
+
+	// Loop through each character in the guessed word
+	for (unsigned int i = 0; i < guess.size(); i++) 
+	{
+		// Add to the score if the characters match
+		// at the corresponding position in each word
+		if (secret[i] == guess[i])
+			score++;
+	}
+	return score;
+}
 
 int main()
 {
@@ -37,8 +57,49 @@ int main()
 	{
 		std::cout << word << std::endl;
 	}
+	
+	// Main loop
+	int lives = startingLives;
+	std::string guess = "";
+	while (true)
+	{
+		// Ask the user for their guess
+		std::cout << "Enter your guess" << std::endl;
 
-	// TODO: implement the rest of the game
+		// Save their guess
+		std::cin >> guess;
+
+		// Is the guess in our list of words
+		if (!words.containsWord(guess))
+		{
+			std::cout << "Invalid guess" << std::endl;
+			continue;
+		}
+
+		// Is the guess correct
+		if (guess == secret)
+		{
+			std::cout << "You win!";
+			break;
+		}
+
+		// Calculate likeness between secret word and guess
+		int score = getLiknessScore(secret, guess);
+
+		// Display the likeness score to the player
+		std::cout << "Likeness score: " << score << std::endl;
+
+		// Remove one life
+		lives--;
+
+		// End the game if we don't have enough lives to continue
+		if (lives <= 0) 
+		{
+			std::cout << "You lose!";
+			break;
+		}
+
+	}
 
 	return 0;
 }

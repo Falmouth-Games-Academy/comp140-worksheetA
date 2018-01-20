@@ -7,6 +7,8 @@ public:
 
 	std::string getRandomWord();
 
+	bool containsWord(std::string word);
+
 private:
 	std::vector<std::string> words;
 };
