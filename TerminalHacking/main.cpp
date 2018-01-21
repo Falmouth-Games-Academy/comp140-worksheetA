@@ -2,6 +2,7 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
+#include <stdlib.h>
 
 const int wordLength = 5;
 const int numberOfWords = 15;
@@ -39,6 +40,46 @@ int main()
 	}
 
 	// TODO: implement the rest of the game
+	bool running = true;
+	int tries = 5;
+
+	std::string userInput;
+	std::string secretWord;
+
+	while (running)
+	{
+		std::cin >> userInput;
+		if (userInput != secret && tries > 0)
+		{
+			tries = tries - 1;
+			int correctLetters = 0;
+
+			for (const char Uchar : userInput)
+			{
+				for (const char Schar : secret)
+				{
+					if (Uchar == Schar)
+					{
+						correctLetters++;
+					}
+				}
+			}
+
+			std::cout << "WORNG!!! " << correctLetters << "/5";
+		}
+		else if (userInput == secret)
+		{
+			std::cout << "CORRECT PASSWORD - ACCESS GRANTED";
+		}
+
+		else
+		{
+			std::cout << "-ERROR- NO MORE ATTEMPTS ALLOWED - SHUTTING DOWN";
+			_sleep(1500);
+			return 0;
+		}
+	}
+
 
 	return 0;
 }
