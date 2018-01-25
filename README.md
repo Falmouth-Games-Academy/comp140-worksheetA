@@ -1,7 +1,7 @@
 # comp140-worksheetA
 ## Pseudocode for improved word choosing algorithm.
 
-  procedure getSecretWord(minLikeness, maxLikeness, matchPercentage)
+  	procedure getSecretWord(minLikeness, maxLikeness, matchPercentage)
 	  minLikeness <- clamp 0, words[0].length
 	  maxLikeness <- clamp 0, words[0].length
 	  matchPercentage <- clamp 0, 100
@@ -22,4 +22,4 @@
 		  end if
 	  end for
 	  return viable not empty and viable.rand or words.rand
-  end procedure
+  	end procedure
