@@ -2,7 +2,8 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
-#include <stdlib.h>
+#include <windows.h>
+#include "TerminalHackingUtils.h"
 
 const int wordLength = 5;
 const int numberOfWords = 15;
@@ -40,6 +41,7 @@ int main()
 	}
 
 	// TODO: implement the rest of the game
+
 	bool running = true;
 	int tries = 5;
 
@@ -48,24 +50,19 @@ int main()
 
 	while (running)
 	{
+		//printing the secret word for debugging puposes
+		//std::cout << secret;
 		std::cin >> userInput;
-		if (userInput != secret && tries > 0)
+		MakeWordUppercase(userInput);
+		
+		if (userInput != secret && tries >  0)
 		{
 			tries = tries - 1;
-			int correctLetters = 0;
+			int correctLetters=CheckCorrrectLetters(userInput, secret);
 
-			for (const char Uchar : userInput)
-			{
-				for (const char Schar : secret)
-				{
-					if (Uchar == Schar)
-					{
-						correctLetters++;
-					}
-				}
-			}
+			std::cout << "WRONG!!! " << correctLetters
+				 << "/5" << std::endl;
 
-			std::cout << "WORNG!!! " << correctLetters << "/5";
 		}
 		else if (userInput == secret)
 		{
@@ -75,11 +72,34 @@ int main()
 		else
 		{
 			std::cout << "-ERROR- NO MORE ATTEMPTS ALLOWED - SHUTTING DOWN";
-			_sleep(1500);
-			return 0;
+			Sleep(1500);
+			running = false;
 		}
 	}
 
-
 	return 0;
+}
+//Chapter 6 - Refrences(tic-tac-toe)
+void MakeWordUppercase(std::string& word)
+{
+	for (char& c : word) c = toupper(c);
+	//std::cout << word;
+}
+
+int CheckCorrrectLetters(std::string& word, std::string& secret)
+{
+	int correctLetters = 0;
+
+	for (const char Uchar : word)
+	{
+		for (const char Schar : secret)
+		{
+			if (Uchar == Schar)
+			{
+				correctLetters++;
+			}
+		}
+	}
+
+	return correctLetters;
 }
