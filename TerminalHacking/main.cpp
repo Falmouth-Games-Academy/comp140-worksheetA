@@ -5,6 +5,7 @@
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+const int startingLives = 4;
 
 int main()
 {
@@ -15,14 +16,8 @@ int main()
 	// Initialise word list
 	WordList words(wordLength);
 
-	// Choose secret word
-	std::string secret = words.getRandomWord();
-
 	// Create a set to hold the list of options
 	std::set<std::string> options;
-
-	// Put the secret word in the set
-	options.insert(secret);
 
 	// Fill the set with more words
 	// Using a set for options guarantees that the elements are all different
@@ -31,14 +26,58 @@ int main()
 		std::string word = words.getRandomWord();
 		options.insert(word);
 	}
+	
+	// Choose secret word
+	std::string secret = words.getSecretWord(options, 2, 6, 10);
 
 	// Display all words
 	for each (std::string word in options)
 	{
 		std::cout << word << std::endl;
 	}
+	
+	// Main loop
+	int lives = startingLives;
+	std::string guess = "";
+	while (true)
+	{
+		// Ask the user for their guess
+		std::cout << "Enter your guess" << std::endl;
 
-	// TODO: implement the rest of the game
+		// Save their guess
+		std::cin >> guess;
+
+		// Is the guess in our list of words
+		if (!words.containsWord(guess))
+		{
+			std::cout << "Invalid guess" << std::endl;
+			continue;
+		}
+
+		// Is the guess correct
+		if (guess == secret)
+		{
+			std::cout << "You win!";
+			break;
+		}
+
+		// Calculate likeness between secret word and guess
+		int score = words.getLikness(secret, guess);
+
+		// Display the likeness score to the player
+		std::cout << "Likeness score: " << score << std::endl;
+
+		// Remove one life
+		lives--;
+
+		// End the game if we don't have enough lives to continue
+		if (lives <= 0) 
+		{
+			std::cout << "You lose!";
+			break;
+		}
+
+	}
 
 	return 0;
 }
