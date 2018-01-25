@@ -39,7 +39,8 @@ int main()
 	// Main loop
 	int lives = startingLives;
 	std::string guess = "";
-	while (true)
+	bool running = true;
+	while (running)
 	{
 		// Ask the user for their guess
 		std::cout << "Enter your guess" << std::endl;
@@ -58,23 +59,25 @@ int main()
 		if (guess == secret)
 		{
 			std::cout << "You win!";
-			break;
+			running = false;
 		}
-
-		// Calculate likeness between secret word and guess
-		int score = words.getLikness(secret, guess);
-
-		// Display the likeness score to the player
-		std::cout << "Likeness score: " << score << std::endl;
-
-		// Remove one life
-		lives--;
-
-		// End the game if we don't have enough lives to continue
-		if (lives <= 0) 
+		else
 		{
-			std::cout << "You lose!";
-			break;
+			// Calculate likeness between secret word and guess
+			int score = words.getLikness(secret, guess);
+
+			// Display the likeness score to the player
+			std::cout << "Likeness score: " << score << std::endl;
+
+			// Remove one life
+			lives--;
+
+			// End the game if we don't have enough lives to continue
+			if (lives <= 0)
+			{
+				std::cout << "You lose!";
+				running = false;
+			}
 		}
 
 	}

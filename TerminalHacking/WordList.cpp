@@ -60,13 +60,12 @@ std::string WordList::getRandomWord()
 /*
 	Returns a random word which has been chosen based on its likeness score to its fellow words
 */
-std::string WordList::getSecretWord(std::set<std::string> options, unsigned int minLikeness = 2, unsigned int maxLikeness = 6, unsigned int matchPercentage = 10)
+std::string WordList::getSecretWord(std::set<std::string> &options, unsigned int minLikeness = 2, unsigned int maxLikeness = 6, unsigned int matchPercentage = 10)
 {
-	std::string baseWord = "";
-	for (std::string f : options) {
-		baseWord = f;
-		break;
-	}
+	// Get the first word to base the length off of
+	auto it = options.begin();
+	std::string baseWord = *it;
+
 	// Clamp the values to keep them within range
 	minLikeness = clamp(minLikeness, 0, baseWord.size());
 	maxLikeness = clamp(minLikeness, 0, baseWord.size());
@@ -76,12 +75,12 @@ std::string WordList::getSecretWord(std::set<std::string> options, unsigned int 
 	int notMatched, likeness, percentage = 0;
 	int wordsSize = options.size();
 
-	for (unsigned int i = 0; i < wordsSize; i++)
+	for (std::string word1 : options)
 	{
 		notMatched = 0;
-		for (unsigned int j = 0; j < wordsSize; j++)
+		for (std::string word2 : options)
 		{
-			likeness = getLikness(words[i], words[j]);
+			likeness = getLikness(word1, word2);
 			if (likeness < minLikeness || likeness > maxLikeness)
 			{
 				notMatched++;
@@ -91,26 +90,23 @@ std::string WordList::getSecretWord(std::set<std::string> options, unsigned int 
 		percentage = 100 - percentage;
 		if (percentage >= matchPercentage)
 		{
-			viable.push_back(words[i]);
+			viable.push_back(word1);
 		}
 	}
 
 	if (viable.size() >= 1)
 	{
 		unsigned short index = rand() % viable.size();
+		std::cout << "VIABLE" << "\t" << viable[index] << std::endl;
 		return viable[index];
 	}
 	else
 	{
-		// https://stackoverflow.com/questions/12863256/how-to-iterate-stdset#12863273
+		// https://stackoverflow.com/questions/20477545/element-at-index-in-a-stdset
 		unsigned short index = rand() % options.size();
-		unsigned short count = 0;
-		for (std::string f : options) {
-			if (count == index) {
-				return f;
-			}
-			count++;
-		}
+		auto it = options.begin();
+		std::advance(it, index);
+		return *it;
 	}
 }
 
