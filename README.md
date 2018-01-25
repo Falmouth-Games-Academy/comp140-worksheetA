@@ -1,5 +1,5 @@
 # comp140-worksheetA
-##Pseudocode for improved word choosing algorithm.
+## Pseudocode for improved word choosing algorithm.
 
   procedure getSecretWord(minLikeness, maxLikeness, matchPercentage)
 	  minLikeness <- clamp 0, words[0].length
