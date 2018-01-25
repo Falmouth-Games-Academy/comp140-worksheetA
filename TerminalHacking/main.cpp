@@ -7,25 +7,6 @@ const int wordLength = 5;
 const int numberOfWords = 15;
 const int startingLives = 4;
 
-/*
-	Takes the secret word and the gussed word.
-	Returns the number of letters which line up.
-*/
-int getLiknessScore(std::string secret, std::string guess)
-{
-	int score = 0;
-
-	// Loop through each character in the guessed word
-	for (unsigned int i = 0; i < guess.size(); i++) 
-	{
-		// Add to the score if the characters match
-		// at the corresponding position in each word
-		if (secret[i] == guess[i])
-			score++;
-	}
-	return score;
-}
-
 int main()
 {
 	// Seed the random number generator with the current time,
@@ -35,14 +16,8 @@ int main()
 	// Initialise word list
 	WordList words(wordLength);
 
-	// Choose secret word
-	std::string secret = words.getRandomWord();
-
 	// Create a set to hold the list of options
 	std::set<std::string> options;
-
-	// Put the secret word in the set
-	options.insert(secret);
 
 	// Fill the set with more words
 	// Using a set for options guarantees that the elements are all different
@@ -51,6 +26,9 @@ int main()
 		std::string word = words.getRandomWord();
 		options.insert(word);
 	}
+	
+	// Choose secret word
+	std::string secret = words.getSecretWord(options, 2, 6, 10);
 
 	// Display all words
 	for each (std::string word in options)
@@ -84,7 +62,7 @@ int main()
 		}
 
 		// Calculate likeness between secret word and guess
-		int score = getLiknessScore(secret, guess);
+		int score = words.getLikness(secret, guess);
 
 		// Display the likeness score to the player
 		std::cout << "Likeness score: " << score << std::endl;
