@@ -28,7 +28,7 @@ int main()
 	}
 	
 	// Choose secret word
-	std::string secret = words.getSecretWord(options, 2, 6, 10);
+	std::string secret = words.getSecretWord(options, 2, 6, 20);
 
 	// Display all words
 	for each (std::string word in options)

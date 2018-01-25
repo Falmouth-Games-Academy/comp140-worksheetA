@@ -44,17 +44,17 @@ WordList::WordList(int wordLength)
 	}
 }
 
-/*
-	Clamps the value between the minimum and maximum
-*/
-int clamp(double value, double min, double max) {
-	return (int)fmin(max, fmax(value, min));
-}
-
 std::string WordList::getRandomWord()
 {
 	int index = rand() % words.size();
 	return words[index];
+}
+
+/*
+	Clamps the value between the minimum and maximum
+*/
+int clamp(double value, double min, double max) {
+	return (unsigned int)fmin(max, fmax(value, min));
 }
 
 /*
@@ -71,37 +71,51 @@ std::string WordList::getSecretWord(std::set<std::string> &options, unsigned int
 	maxLikeness = clamp(minLikeness, 0, baseWord.size());
 	matchPercentage = clamp(matchPercentage, 0, 100);
 	
+	// Use a vector to store words which fit the requested requirements
 	std::vector<std::string> viable;
+
+	// Initalise variables to be used in the for loop
 	int notMatched, likeness, percentage = 0;
 	int wordsSize = options.size();
 
 	for (std::string word1 : options)
 	{
 		notMatched = 0;
+		// Compare the likeness score of word1 to all other words
 		for (std::string word2 : options)
 		{
+			// Get the likeness score of word1 to word2
 			likeness = getLikness(word1, word2);
+
+			// Make word1 more likely to be excluded from viable words if the
+			// likeness score is below or above the minimum or maximum bounds
 			if (likeness < minLikeness || likeness > maxLikeness)
 			{
 				notMatched++;
 			}
 		}
+
+		// Workout the percentage word1 matches the minimum and manimum bounds
 		percentage = 100 / wordsSize * notMatched;
 		percentage = 100 - percentage;
+
+		// Add the word to the viable list if it meets the likeness requirement
 		if (percentage >= matchPercentage)
 		{
 			viable.push_back(word1);
 		}
 	}
 
+	// If there's at least one word in the viable list
 	if (viable.size() >= 1)
 	{
+		// Pick a random position in the set and return the secret word
 		unsigned short index = rand() % viable.size();
-		std::cout << "VIABLE" << "\t" << viable[index] << std::endl;
 		return viable[index];
 	}
 	else
 	{
+		// Otherwise resort back to the options set and pick a secret word from that
 		// https://stackoverflow.com/questions/20477545/element-at-index-in-a-stdset
 		unsigned short index = rand() % options.size();
 		auto it = options.begin();
