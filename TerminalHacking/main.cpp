@@ -2,8 +2,10 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
+#include <cstdlib>
 #include <windows.h>
 #include "TerminalHackingUtils.h"
+#include "random"
 
 const int wordLength = 5;
 const int numberOfWords = 15;
@@ -43,36 +45,38 @@ int main()
 	// TODO: implement the rest of the game
 
 	bool running = true;
-	int tries = 5;
+	int tries = 4;
 
 	std::string userInput;
 	std::string secretWord;
 
 	while (running)
 	{
-		//printing the secret word for debugging puposes
-		//std::cout << secret;
 		std::cin >> userInput;
 		MakeWordUppercase(userInput);
 		
 		if (userInput != secret && tries >  0)
 		{
-			tries = tries - 1;
+			tries -= 1;
 			int correctLetters=CheckCorrrectLetters(userInput, secret);
 
-			std::cout << "WRONG!!! " << correctLetters
+			std::cout << "INCORECT PASSWORD - ACCESS DENIED" << correctLetters
 				 << "/5" << std::endl;
 
 		}
 		else if (userInput == secret)
 		{
-			std::cout << "CORRECT PASSWORD - ACCESS GRANTED";
+			std::cout << "CORRECT PASSWORD - ACCESS GRANTED" << std::endl;
+			StreamlineOfRandomChars();
+			Sleep(3000);
+			running = false;
 		}
 
-		else
+		if (tries == 0)
 		{
+			Sleep(500);
 			std::cout << "-ERROR- NO MORE ATTEMPTS ALLOWED - SHUTTING DOWN";
-			Sleep(1500);
+			Sleep(2000);
 			running = false;
 		}
 	}
@@ -83,23 +87,36 @@ int main()
 void MakeWordUppercase(std::string& word)
 {
 	for (char& c : word) c = toupper(c);
-	//std::cout << word;
 }
 
 int CheckCorrrectLetters(std::string& word, std::string& secret)
 {
 	int correctLetters = 0;
+	int numberOfLetters = word.length();
 
-	for (const char Uchar : word)
+	for (int i = 0; i < numberOfLetters; i++)
 	{
-		for (const char Schar : secret)
+		if (word[i] == secret[i])
 		{
-			if (Uchar == Schar)
-			{
-				correctLetters++;
-			}
+			correctLetters++;
 		}
 	}
 
 	return correctLetters;
+}
+
+int StreamlineOfRandomChars()
+{
+	int numerbOfchars = 1200;
+
+	while (numerbOfchars != 0)
+	{
+		char asciiValue = RandInt(33, 90);
+		std::cout << asciiValue;
+		Sleep(8);
+		numerbOfchars -= 1;
+	}
+
+	std::cout << "END OF ENCRYPTED MESSAGE - SHUTTING DOWN";
+	return 0;
 }
