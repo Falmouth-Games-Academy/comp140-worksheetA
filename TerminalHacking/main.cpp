@@ -1,10 +1,14 @@
 // main.cpp: Defines the entry point for the console application.
 //
+#include <iostream>
 #include "stdafx.h"
 #include "WordList.h"
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+
+int WordMatch(std::string guessedWord, std::string secret, int wordLength);
+
 
 int main()
 {
@@ -40,5 +44,38 @@ int main()
 
 	// TODO: implement the rest of the game
 
+	int lives = 4;
+	while (lives != 0)
+	{
+		std::string guessedWord;
+		std::cin >> guessedWord;
+		int matchedCharacters = WordMatch(const std::string guessedWord, const std::string secret, int wordLength);
+		if (matchedCharacters == wordLength)
+		{
+			std::cout << "Winner Winner Chicken Dinner!";
+		}
+		else
+		{
+			std::cout << "The word likeness is " << matchedCharacters << " characters." << std::endl;
+			std::cout << "Try one more time! I believe in you!" << std:endl;
+			lives--;
+		}
+	}
+	std::cout << "Better luck next time!" << std::endl;
+
+
 	return 0;
+}
+
+int WordMatch(const std::string guessedWord, const std::string secret, int wordLength)  // ??
+{
+	int matches = 0;
+	for (int i = 0, i < wordLength, i++)
+	{
+		if (guessedWord[i] == secret[i])  // ??
+		{
+			matches++;
+		}
+	}
+	return matches;
 }
