@@ -7,7 +7,8 @@
 const int wordLength = 5;
 const int numberOfWords = 15;
 
-int WordMatch(std::string guessedWord, std::string secret, int wordLength);
+int WordMatch(const std::string& guessedWord, const std::string& secret, int wordLength);
+void MakeCapitals(std::string & guessedWord, int wordLength);
 
 
 int main()
@@ -45,11 +46,12 @@ int main()
 	// TODO: implement the rest of the game
 
 	int lives = 4;
-	while (lives != 0)
+	while (lives > 0)
 	{
 		std::string guessedWord;
 		std::cin >> guessedWord;
-		int matchedCharacters = WordMatch(const std::string guessedWord, const std::string secret, int wordLength);
+		MakeCapitals(guessedWord, wordLength);
+		int matchedCharacters = WordMatch(guessedWord, secret, wordLength);
 		if (matchedCharacters == wordLength)
 		{
 			std::cout << "Winner Winner Chicken Dinner!";
@@ -57,8 +59,9 @@ int main()
 		else
 		{
 			std::cout << "The word likeness is " << matchedCharacters << " characters." << std::endl;
-			std::cout << "Try one more time! I believe in you!" << std:endl;
 			lives--;
+			std::cout << "Incorrect. Try one more time! I believe in you!" << std::endl;
+			std::cout << "Lives left " << lives << std::endl;
 		}
 	}
 	std::cout << "Better luck next time!" << std::endl;
@@ -67,15 +70,26 @@ int main()
 	return 0;
 }
 
-int WordMatch(const std::string guessedWord, const std::string secret, int wordLength)  // ??
+int WordMatch(const std::string& guessedWord, const std::string& secret, int wordLength) 
 {
 	int matches = 0;
-	for (int i = 0, i < wordLength, i++)
+	for (int i = 0; i < wordLength; i++)
 	{
-		if (guessedWord[i] == secret[i])  // ??
+		if (guessedWord[i] == secret[i]) 
 		{
 			matches++;
 		}
 	}
 	return matches;
+}
+
+void MakeCapitals(std::string & guessedWord, int wordLength)
+{
+	for (int i = 0; i < wordLength; i++)
+	{
+		if (isalpha(guessedWord[i]))
+		{
+			guessedWord[i] = toupper(guessedWord[i]);
+		}
+	}
 }
