@@ -3,8 +3,16 @@
 #include "stdafx.h"
 #include "WordList.h"
 
+
 const int wordLength = 5;
 const int numberOfWords = 15;
+
+int temp;
+int lives = 4;
+std::string guess;
+
+int Compare(std::string secret, std::string guess);
+std::string ToUpper(std::string string);
 
 int main()
 {
@@ -38,7 +46,67 @@ int main()
 		std::cout << word << std::endl;
 	}
 
-	// TODO: implement the rest of the game
 
+	//Main game loop
+
+	while (true)
+	{
+		std::cout << "\nYou have: " << lives << " lives. Please enter a guess. \n";
+		std::cin >> guess;
+		guess = ToUpper(guess);
+
+		//If guess is not in list of possible words input again.
+		if (options.count(guess) == 0)
+		{
+			std::cout << "Invalid guess \n";
+			continue;
+		}
+
+		//If the guess is correct exit loop.
+		if (guess == secret)
+		{
+			std::cout << "\nYou win! \n";
+			break;
+		}
+
+		std::cout << "The likeness is " << Compare(secret, guess) << "\n";
+		lives--;
+
+		if (lives <= 0)
+		{
+			std::cout << "\nYou lose! \n";
+			break;
+		}
+				
+	}
+
+	std::cin.ignore();
+	std::cin.get();
 	return 0;
 }
+
+std::string ToUpper(std::string string)
+{
+	for (int i = 0; i < string.length(); i++)
+	{
+		string[i] = ::toupper(string[i]);
+	}
+
+	return string;
+}
+
+int Compare(std::string secret, std::string guess)
+{
+	int likeness = 0;
+
+	for (int i = 0; i < secret.length(); i++)
+	{
+		if (secret[i] == guess[i])
+		{
+			likeness++;
+		}
+	}
+
+	return likeness;
+}
+
