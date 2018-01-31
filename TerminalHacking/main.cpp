@@ -5,6 +5,49 @@
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+const int numberOfLives = 4;
+
+std::string guessWord(int numberOfLives)
+{	// Requests a guess and shows how many lives remaining
+	// Returns the guessed word
+	std::string wordGuessed = "None";
+	std::cout << "Please type your guess and press enter." << std::endl;
+	std::cout << "You have " << numberOfLives << " lives left" << std::endl;
+	std::cin >> wordGuessed;
+	return wordGuessed;
+}
+
+std::string lengthCompare(std::string wordGuessed, std::string secret) // Used to check if one of the words is longer, then passed into likenessCheck to avoid
+{																	   // crashing by trying to check a character that isnt there
+	int compared = wordGuessed.length() - secret.length();
+	if (compared < 0) // if wordGuessed is smaller than secret
+	{
+		return wordGuessed;
+	}
+	else if (compared > 0) // if wordGuessed is bigger
+	{
+		return secret;
+	}
+	else // if equal
+	{
+		return secret;
+	}
+}
+
+int likenessCheck(std::string wordGuessed, std::string secret)
+{	// Checks each position of the guessed word vs the secret word and returns the likeness score(matching letter and position)
+	std::string shortestWord = lengthCompare(wordGuessed, secret);
+	int likeness = 0;
+	for (int i = 0; i < shortestWord.length(); i++)
+	{
+		wordGuessed[i] = (toupper(wordGuessed[i])); // makes current letter upper case
+		if (secret[i] == wordGuessed[i])
+		{
+			likeness++;
+		}
+	}
+	return likeness;
+}
 
 int main()
 {
@@ -38,7 +81,37 @@ int main()
 		std::cout << word << std::endl;
 	}
 
-	// TODO: implement the rest of the game
+	// Run until the players hits 0 lives
+	// main game loop where other functions are called from
+	for (int i = 0; i < numberOfLives; i++)
+	{
+		std::string wordGuessed = guessWord((numberOfLives - i)); // passes argument number of lives minus the amount of tries taken already
+		int likeness = likenessCheck(wordGuessed, secret); // gets likeness score
+		if (likeness < secret.length())
+		{
+			std::cout << "------------------------------------------" << std::endl; // used just to seperate the last try in the command line
+			for each (std::string word in options) // print the list of options again
+			{
+				std::cout << word << std::endl;
+			}
+			std::cout << "Likeness score: " << likeness << std::endl; // Print the likeness score from last guess
+			if ((numberOfLives - i) > 1) // if player still has lives tell them to try again
+			{
+				std::cout << "Give it another try!" << std::endl;
+			}
+			else // if no more lives
+			{
+				std::cout << "You ran out of lives, the police have been called." << std::endl << "Please wait for them to collect you." << std::endl;
+			}
+		}
+		else // this is if they get the correct word
+		{
+			std::cout << std::endl << "Well done, you have entered the correct password!" << std::endl;
+			break;
+		}
+	}
 
 	return 0;
 }
+
+
