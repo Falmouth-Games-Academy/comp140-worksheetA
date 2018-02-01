@@ -2,7 +2,6 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
-
 const int wordLength = 5;
 const int numberOfWords = 15;
 int i;
@@ -56,7 +55,7 @@ int main()
 		else
 		{
 			intNumRight = 0;
-			for (i = 0; i<(wordLength-1); i++) {
+			for (i = 0; i<(wordLength); i++) {
 				if (secret[i] == strGuess[i])
 				{
 					intNumRight++;
