@@ -60,7 +60,7 @@ int clamp(double value, double min, double max) {
 /*
 	Returns a random word which has been chosen based on its likeness score to its fellow words
 */
-std::string WordList::getSecretWord(std::set<std::string> &options, unsigned int minLikeness = 2, unsigned int maxLikeness = 6, unsigned int matchPercentage = 10)
+std::string WordList::getSecretWord(const std::set<std::string> &options, unsigned int minLikeness = 2, unsigned int maxLikeness = 6, unsigned int matchPercentage = 10)
 {
 	// Get the first word to base the length off of
 	auto it = options.begin();
@@ -128,28 +128,24 @@ std::string WordList::getSecretWord(std::set<std::string> &options, unsigned int
 	Takes in a string and looks through words to see if it exists
 	Returns boolean for whether the word is found or not
 */
-bool WordList::containsWord(std::string word)
+bool WordList::containsWord(const std::set<std::string> &options, std::string &word)
 {
-	for (unsigned int i = 0; i < words.size(); i++)
-	{
-		if (words[i] == word)
-		{
-			return true;
-		}
-	}
-	return false;
+	auto search = options.find(word);
+
+	// The search will return a number one longer than the string (optiosn.end()) if not found
+	return search != options.end();
 }
 
 /*
 	Takes the secret word and the gussed word.
 	Returns the number of letters which line up.
 */
-int WordList::getLikness(std::string secret, std::string guess)
+int WordList::getLikness(std::string &secret, std::string &guess)
 {
 	int score = 0;
 
 	// Loop through each character in the guessed word
-	for (unsigned int i = 0; i < guess.size(); i++)
+	for (unsigned int i = 0; i < secret.size(); i++)
 	{
 		// Add to the score if the characters match
 		// at the corresponding position in each word

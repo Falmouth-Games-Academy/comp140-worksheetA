@@ -49,7 +49,7 @@ int main()
 		std::cin >> guess;
 
 		// Is the guess in our list of words
-		if (!words.containsWord(guess))
+		if (!words.containsWord(options, guess))
 		{
 			std::cout << "Invalid guess" << std::endl;
 			continue;
