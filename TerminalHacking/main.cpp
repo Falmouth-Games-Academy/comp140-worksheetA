@@ -2,8 +2,9 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
-
+// length of the words in the game 
 const int wordLength = 5;
+// Number of words in the game
 const int numberOfWords = 15;
 
 int main()
