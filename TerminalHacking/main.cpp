@@ -6,7 +6,8 @@
 const int wordLength = 5;
 // Number of words in the game
 const int numberOfWords = 15;
-
+// Number of tries available 
+const int numberOfTries = 4;
 int main()
 {
 	// Seed the random number generator with the current time,
@@ -43,3 +44,4 @@ int main()
 
 	return 0;
 }
+
