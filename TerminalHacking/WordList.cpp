@@ -47,5 +47,27 @@ WordList::WordList(int wordLength)
 std::string WordList::getRandomWord()
 {
 	int index = rand() % words.size();
+	words.erase(words.begin() + index);
 	return words[index];
+}
+
+std::string WordList::getLikeWord(std::string secret, int likeness, int findAttempts)
+{
+	for (int i = 0; i < findAttempts; i++)
+	{
+		int index = rand() % words.size();
+		int likenessCounter = 0;
+		for (int j = 0; j < likeness; j++)
+		{
+			if (words[index].find(secret[rand()%(secret.length()-1)]) != std::string::npos)
+			{
+				likenessCounter++;
+			}
+		}
+		if (likenessCounter == likeness)
+		{
+			return words[index];
+		}
+	}
+	return getRandomWord();
 }
