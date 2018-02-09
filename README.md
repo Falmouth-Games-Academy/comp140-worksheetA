@@ -1,5 +1,5 @@
 # comp140-worksheetA
-
+```
 string getLikeWord(string secret, int likeness, int findAttempts)  
 {
 	for (int i = 0 -> findAttempts)  
@@ -19,4 +19,5 @@ string getLikeWord(string secret, int likeness, int findAttempts)
 		}  
 	}  
 	return getRandomWord()  
-}  
+}
+```
