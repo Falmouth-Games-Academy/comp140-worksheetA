@@ -2,9 +2,17 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
+//#include <string>
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+
+int Calculate_Likeness(std::string secretWord, std::string guessWord)
+{
+	int likeness = 0;
+	for (int i = 0; i < wordLength; i++) secretWord[i] == guessWord[i] ? likeness++ : true; // if the letters match, increase likeness. Else do nothing
+	return likeness;
+}
 
 int main()
 {
