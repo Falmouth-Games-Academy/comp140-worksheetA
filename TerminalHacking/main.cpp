@@ -3,6 +3,7 @@
 #include "stdafx.h"
 #include "WordList.h"
 //#include <string>
+#include <algorithm>
 
 const int wordLength = 5;
 const int numberOfWords = 15;
@@ -10,7 +11,8 @@ const int numberOfWords = 15;
 int Calculate_Likeness(std::string secretWord, std::string guessWord)
 {
 	int likeness = 0;
-	for (int i = 0; i < wordLength; i++) secretWord[i] == guessWord[i] ? likeness++ : true; // if the letters match, increase likeness. Else do nothing
+	for (int i = 0; i < wordLength; i++) 
+		secretWord[i] == guessWord[i] ? likeness++ : true; // if the letters match, increase likeness. Else do nothing
 	return likeness;
 }
 
@@ -46,7 +48,31 @@ int main()
 		std::cout << word << std::endl;
 	}
 
-	// TODO: implement the rest of the game
+	int lives = 4;
+	std::string guess;
+	bool valid;
+	bool success = false;
+
+	do {
+		valid = false;
+		while (!valid) { // get input until guess is valid
+			std::cout << "Enter your Guess..." << std::endl;
+			std::getline(std::cin, guess);
+			std::transform(guess.begin(), guess.end(), guess.begin(), ::toupper); // automatically converts guess to upper case - taken from online
+			for (auto i : options)
+				if (i == guess ) valid = true; // if guess is equal to one of the options, valid becomes true; else is stays false.
+			if (!valid) std::cout << "Invalid guess" << std::endl;
+		}	
+		if (guess == secret) {
+			success = true;
+			std::cout << "yeet" << std::endl;
+		}
+		else {
+			std::cout << "Likeness between guess and secret word is " << Calculate_Likeness(secret, guess) << std::endl;
+			lives--;
+		}
+	} while (lives > 0 && !success); // iterate while player has lives or hasnt guessed correctly
+	success ? std::cout << "You win!" : std::cout << "You lose!";
 
 	return 0;
 }
