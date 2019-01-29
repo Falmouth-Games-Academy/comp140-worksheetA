@@ -5,7 +5,7 @@
 ```
 Procedure GetRandomWordOfLikeness( likeness, WordsList, secrateWord)
 
-	do while GetLikeness(word, secretWord) == likeness;
+	do while GetLikeness(word, secretWord) == likeness
 		word = getRandomeWord()
 	end do while
 	
