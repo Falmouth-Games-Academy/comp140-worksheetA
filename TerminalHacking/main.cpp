@@ -4,6 +4,7 @@
 #include "WordList.h"
 //#include <string>
 #include <algorithm>
+#include <map>
 
 const int wordLength = 5;
 const int numberOfWords = 15;
@@ -36,10 +37,17 @@ int main()
 
 	// Fill the set with more words
 	// Using a set for options guarantees that the elements are all different
+
+	std::map<int, int> word_tally = { {0,0},{1,0},{2,0},{3,0},{4,0} };
+
 	while (options.size() < numberOfWords)
 	{
 		std::string word = words.getRandomWord();
-		options.insert(word);
+		int likeness = Calculate_Likeness(secret, word); // gets the likeness between word and likeness
+		if (word_tally[likeness] < 4) { // if there are more 4 words of the same likeness already, dont add this word.
+			options.insert(word);
+			word_tally[likeness] = word_tally[likeness] + 1;
+		}
 	}
 
 	// Display all words
@@ -65,7 +73,6 @@ int main()
 		}	
 		if (guess == secret) {
 			success = true;
-			std::cout << "yeet" << std::endl;
 		}
 		else {
 			std::cout << "Likeness between guess and secret word is " << Calculate_Likeness(secret, guess) << std::endl;
