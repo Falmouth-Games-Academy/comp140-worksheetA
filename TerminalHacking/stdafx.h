@@ -18,3 +18,7 @@
 #include <string>
 #include <set>
 #include <time.h>
+
+#include <cctype>
+#include <cwctype>
+#include <stdexcept>

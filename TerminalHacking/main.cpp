@@ -2,15 +2,16 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
+using namespace std;
 
 const int wordLength = 5;
 const int numberOfWords = 15;
 int numberOfLives = 4;
-std::string guessedWord;
+string guessedWord;
 bool guessed = false;
 
-std::set<std::string> options;
-std::string secret;
+set<string> options;
+string secret;
 
 int main()
 {
@@ -36,20 +37,25 @@ int main()
 		// Using a set for options guarantees that the elements are all different
 		while (options.size() < numberOfWords)
 		{
-			std::string word = words.getRandomWord();
+			string word = words.getRandomWord();
 			options.insert(word);
 		}
 
 		// Display all words
-		for each (std::string word in options)
+		for each (string word in options)
 		{
-			std::cout << word << std::endl;
+			cout << word << endl;
 		}
 	}
 
 	// TODO: implement the rest of the game
 
-	std::cin >> guessedWord;
+	cin >> guessedWord;
+
+	for (basic_string<char>::iterator l = guessedWord.begin(); l != guessedWord.end(); l++)
+	{
+		*l = toupper(*l);
+	}
 
 	for each (std::string word in options)
 	{
