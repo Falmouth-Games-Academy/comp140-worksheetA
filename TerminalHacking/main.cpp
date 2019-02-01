@@ -40,30 +40,43 @@ int main()
 	}
 
 	// TODO: implement the rest of the game
-	std::string guess;
-	std::cin >> guess;
-	std::cout << "your guess was: " + guess << std::endl;
-	if (guess == secret)
-	{
-		std::cout << "You win!" << std::endl;
-	} else
-		if (secret == guess)
+	while (livesRemaining > 0) {
+		std::string guess;
+		int letterCount = 0;
+		std::cin >> guess;
+		std::cout << "your guess was: " + guess << std::endl;
+		if (guess == secret)
 		{
-			std::cout << "The first character was correct." << std::endl;
+			std::cout << "You win!" << std::endl;
+			break;
 		}
-		else
-		{
+		else {
+
+			for (int i = 0; i < secret.length(); i++)
+			{
+				if (guess[i] == secret[i])
+				{
+					letterCount++;
+				}
+
+
+			}
+
+
+			std::cout << "You got " << letterCount << " letters correct";
 			std::cout << "You lost a life, try again!" << std::endl;
 			std::cin >> guess;
-			std::cout << "your guess was: " + guess << std::endl;
+			std::cout << "your guess was: " << guess << std::endl;
 			livesRemaining--;
+
+
+			if (livesRemaining == 0)
+			{
+				std::cout << "You're out of lives therefore you lose!" << std::endl;
+			}
+
 		}
-	if (livesRemaining == 0)
-	{
-		std::cout << "You're out of lives therefore you lose!" << std::endl;
 	}
-
-
 
 
 
