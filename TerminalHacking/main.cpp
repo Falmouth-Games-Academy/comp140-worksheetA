@@ -46,7 +46,23 @@ int main()
 	if (guess == secret)
 	{
 		std::cout << "You win!" << std::endl;
+	} else
+		if (secret == guess)
+		{
+			std::cout << "The first character was correct." << std::endl;
+		}
+		else
+		{
+			std::cout << "You lost a life, try again!" << std::endl;
+			std::cin >> guess;
+			std::cout << "your guess was: " + guess << std::endl;
+			livesRemaining--;
+		}
+	if (livesRemaining == 0)
+	{
+		std::cout << "You're out of lives therefore you lose!" << std::endl;
 	}
+
 
 
 
