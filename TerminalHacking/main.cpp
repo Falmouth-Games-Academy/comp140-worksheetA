@@ -9,6 +9,8 @@ bool PlayTheGame = true;
 int Lives = 4;
 int WordsLength = 0; //2 min - 14 max
 const int NumberOfWords = 15;
+int WordLikelinesses[] = { 5, 3, 3, 3, 0, 0, 0, 0, 0};
+int WordLikelinessesDefault[] = { 5, 3, 3, 3, 0, 0, 0, 0, 0 };
 std::string PlayerInput;
 std::string SecretWord;
 std::set<std::string> ListOfWords;
@@ -46,7 +48,7 @@ void DifficultySelection() {
 }
 
 //FUNCTION SETS UP LIST OF WORDS
-void WordListSetup(){
+void WordListSetup() {
 	// Seed the random number generator with the current time,
 		// to ensure different results each time the program is run
 	srand(static_cast<unsigned int>(time(nullptr)));
@@ -56,6 +58,7 @@ void WordListSetup(){
 
 	// Choose secret word
 	SecretWord = words.getRandomWord();
+	
 
 	// Put the secret word in the set
 	ListOfWords.insert(SecretWord);
@@ -65,7 +68,18 @@ void WordListSetup(){
 	while (ListOfWords.size() < NumberOfWords)
 	{
 		std::string word = words.getRandomWord();
-		ListOfWords.insert(word);
+		int Likeliness = 0;
+		for (int i = 0; i < word.length(); i++)
+		{
+			if (word[i] == SecretWord[i]) Likeliness++;
+		}
+
+
+		if (WordLikelinesses[Likeliness] > 0) 
+		{
+			ListOfWords.insert(word);
+			WordLikelinesses[Likeliness]--;
+		}
 	}
 }
 
@@ -139,6 +153,10 @@ void Replay() {
 			Lives = 4;
 			WordsLength = 0;
 			ListOfWords.clear();
+			for (int i = 0; i < (sizeof(WordLikelinesses) / sizeof(*WordLikelinesses)); i++)
+			{
+				WordLikelinesses[i] = WordLikelinessesDefault[i];
+			}
 		}
 		else if (PlayerInput == "NO")
 		{

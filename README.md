@@ -5,12 +5,14 @@ Open main.cpp and run it.
 
 #IMPROVED WORD CHOOSING ALGORITHM
 
+#This way we have more controll over likeliness of generated words
+
 '''
 new integer array variable = [no of words with likelines 0, 1 ,2 ,3] 
 
-	//must add up to total number of words
+	//must add up to total number of words minus one (secret word)
 	
-	//may be higher/lower for different game difficulty that I have implemented
+	//variable may be higher/lower for different game difficulty that I have implemented
 	
 while size of list of words is smaller than number of words
 
@@ -18,8 +20,10 @@ while size of list of words is smaller than number of words
 	
 	check random word's likeliness to secret word
 	
-	if word's likeliness exists in an array variable and an array variable at the likleliness level is bigger than 0
+	if word's an array variable at the likleliness level is bigger than 0
 	
+		add word to list of words
+		
 		remove one from an array variable at the likleliness level
 		
 	end if
