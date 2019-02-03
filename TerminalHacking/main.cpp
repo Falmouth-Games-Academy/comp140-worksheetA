@@ -4,16 +4,35 @@
 #include "WordList.h"
 using namespace std;
 
+int numberOfLives = 4;
+int maxLikenessWordCount = 3;
+
 const int wordLength = 5;
 const int numberOfWords = 15;
-int numberOfLives = 4;
-string guessedWord;
+
 bool guessed = false;
 
-set<string> options;
+string guessedWord;
 string secret;
+set<string> options;
 
-int main()
+int CalculateLikeness(string word)
+{
+	int likeness = 0;
+	//Go through each letter of the word
+	for (int i = 0; i < word.length(); ++i)
+	{
+		//If the letters of both words at the current position are the same
+		if (word.at(i) == secret.at(i))
+		{
+			//Increase the likeness by 1
+			likeness += 1;
+		}
+	}
+	return likeness;
+}
+
+void ChooseWords()
 {
 	if (!guessed)
 	{
@@ -37,8 +56,22 @@ int main()
 		// Using a set for options guarantees that the elements are all different
 		while (options.size() < numberOfWords)
 		{
-			string word = words.getRandomWord();
-			options.insert(word);
+			//Randomly choose a word
+			string chosenWord = words.getRandomWord();
+			int chosenWordlikeness = CalculateLikeness(chosenWord);
+			int LikenessWordCount = 0;
+			//Compare the likeness of the chosen word with likeness of all words in options
+			for each (string word in options)
+			{
+				int wordLikeness = CalculateLikeness(word);
+				if (chosenWordlikeness == wordLikeness)
+				{
+					LikenessWordCount += 1;
+				}
+			}
+			//If the number of words with the same likeness as the chosen word is less than the max limit, insert the word
+			if(LikenessWordCount < maxLikenessWordCount)
+				options.insert(chosenWord);
 		}
 
 		// Display all words
@@ -47,47 +80,52 @@ int main()
 			cout << word << endl;
 		}
 	}
+}
 
-	// TODO: implement the rest of the game
+int main()
+{
+	ChooseWords();
 
+	//Input the guessed word
 	cin >> guessedWord;
 
+	//Convert any lowercase characters to uppercase
 	for (basic_string<char>::iterator l = guessedWord.begin(); l != guessedWord.end(); l++)
 	{
 		*l = toupper(*l);
 	}
 
-	for each (std::string word in options)
+	for each (string word in options)
 	{
 		if (guessedWord == word)
 		{
+			//If the guessed word is the secret word
 			if (guessedWord == secret)
 			{
-				std::cout << "Y O U   W I N" << std::endl;
+				//Print a win message and reset the game
+				cout << "Y O U   W I N" << endl;
 				guessed = false;
 				numberOfLives = 4;
 				main();
 				return 0;
 			}
-			else if(numberOfLives > 1)
+			//If the guessed word is not the secret word and the player has 1 or more lives
+			else if (numberOfLives >= 1)
 			{
-				int likeness = 0;
-				for (int i = 0; i<guessedWord.length(); ++i)
-				{
-					if (guessedWord.at(i) == secret.at(i))
-					{
-						likeness += 1;
-					}
-				}
-				std::cout << "Likeness: " << likeness << std::endl;
+				//Calculate the likeness of the guessed word to the secret word, subtract a life and reset the input
+				int likeness = CalculateLikeness(guessedWord);
+				cout << "Likeness: " << likeness << endl;
+				cout << "You have " << numberOfLives << " lives left." << endl;
 				guessed = true;
 				numberOfLives -= 1;
 				main();
 				return 0;
 			}
+			//If the guessed word is not the secret word and the player has 0 lives left
 			else
 			{
-				std::cout << "G A M E	O V E R" << std::endl;
+				//Print a game over message and reset the game
+				cout << "G A M E	O V E R" << endl;
 				guessed = false;
 				numberOfLives = 4;
 				main();
@@ -96,9 +134,9 @@ int main()
 		}
 	}
 
-	std::cout << "Invalid Guess" << std::endl;
+	//If none of the conditions above are met, print an invalid guess message and reset the input
+	cout << "Invalid Guess" << endl;
 	guessed = true;
 	main();
-
 	return 0;
 }
