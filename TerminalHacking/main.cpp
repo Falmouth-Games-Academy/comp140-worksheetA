@@ -2,10 +2,14 @@
 //
 #include "stdafx.h"
 #include "WordList.h"
+#include <random>
 #include <string>
 
 const int wordLength = 5;
 const int numberOfWords = 15;
+const bool unique_words = true;		// Set to false if player can guess the same word multiple times (and consequently lose lives each time)
+
+float medianLikeness;
 
 int calc_likeness(std::string choice, std::string word)
 {
@@ -17,6 +21,19 @@ int calc_likeness(std::string choice, std::string word)
 			likeness++;
 	}
 	return likeness;
+}
+
+// Returns a word from the word list based on a given likeness score
+std::string findWord(int likeness, std::string secretWord, WordList words)
+{
+	medianLikeness += likeness;
+	std::string word = "";
+	do
+	{
+		word = words.getRandomWord();
+
+	} while (calc_likeness(word, secretWord) != likeness);
+	return (word);
 }
 
 int main()
@@ -40,8 +57,8 @@ int main()
 		// Create a set to hold the list of options
 		std::set<std::string> options;
 
-		// Create a vector to hold the words that don't fit the difficulty criteria
-		std::vector<std::string> checked_words;
+		// Create a vector to hold the guessed words
+		std::set<std::string> guessed_words;
 
 		// Put the secret word in the set
 		options.insert(secret);
@@ -54,17 +71,25 @@ int main()
 			std::cout << "Please input desired difficulty: 1 for EASY, 2 for MEDIUM and 3 for HARD\n";
 			std::cin >> difficulty;
 
-		} while (difficulty < 1 || difficulty > 3);
+		} while ((difficulty < 1 || difficulty > 3));	// Make sure 
+
+		difficulty = wordLength - difficulty;
+		
+
+		// Setup for generating random number within given range
+		std::random_device rd; // obtain a random number from hardware
+		std::mt19937 eng(rd()); // seed the generator for generating a range of difficulties
+		std::uniform_int_distribution<> distr(fmax(0, difficulty - 2), fmin(wordLength - 2, difficulty + 1)); // define the range for likeness: 1 more or less than the difficulty
 
 		// Fill the set with more words
 		// Using a set for options guarantees that the elements are all different
 		while (options.size() < numberOfWords)
 		{
-			// TODO: implement difficulty algorithm
-			std::string word = words.getRandomWord();
-			checked_words.insert(checked_words.end(), word);
-			options.insert(word);
+			// Insert a random word that matches the given likeness score (difficulty)
+			options.insert(findWord(distr(eng), secret, words));
 		}
+
+		std::cout << "Median Likeness is " << medianLikeness / 15 << "\n";
 
 		// Display all words
 		for each (std::string word in options)
@@ -77,24 +102,36 @@ int main()
 
 		while (lives > 0 && word_was_guessed == false)
 		{
-			std::string choice;
+			std::string player_word = "";
 
-			std::cout << "Choose a word:\n";
-			std::cin >> choice;
-
-			for (int i = 0; i < choice.length(); i++)
+			// Keep asking for input until the player chooses a new word
+			do
 			{
-				choice[i] = toupper(choice[i]);
-			}
+				if (player_word != "")
+				{
+					std::cout << "You already tried guessing that word!\n";
+				}
 
+				std::cout << "Choose a word:\n";
+				std::cin >> player_word;
+
+				for (int i = 0; i < player_word.length(); i++)
+				{
+					player_word[i] = toupper(player_word[i]);
+				}
+			} while (guessed_words.find(player_word) != guessed_words.end() && unique_words == true);
+
+			guessed_words.insert(player_word);
+
+			// Search for player word within options
 			bool word_in_options = false;
-
+			
 			for each (std::string word in options)
 			{
-				if (word == choice)
+				if (word == player_word)
 				{
 						
-					word_in_options = true;
+					word_in_options = true;	// Stop searching if word was found
 					break;
 				}
 			}
@@ -107,10 +144,10 @@ int main()
 			else
 				lives--;	// if the word is valid, decrement lives 
 
-			if (choice == secret)
+			if (player_word == secret)
 				word_was_guessed = true;
 			else
-				std::cout << "Likeness: " << calc_likeness(choice, secret) << "\nLives remaining: " << lives << "\n";
+				std::cout << "Likeness: " << calc_likeness(player_word, secret) << "\nLives remaining: " << lives << "\n";
 		}
 
 		if (word_was_guessed == true)

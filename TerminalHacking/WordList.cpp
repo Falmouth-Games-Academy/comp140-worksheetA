@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "WordList.h"
+#include <math.h>
 
 const std::string wordFileName("words.txt");
 
@@ -46,6 +47,6 @@ WordList::WordList(int wordLength)
 
 std::string WordList::getRandomWord()
 {
-	int index = rand() % words.size();
-	return words[index];
+	secretWordIndex = rand() % words.size();
+	return words[secretWordIndex];
 }
