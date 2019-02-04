@@ -49,3 +49,16 @@ std::string WordList::getRandomWord()
 	int index = rand() % words.size();
 	return words[index];
 }
+
+int WordList::getLikeness(std::string generatedWord, std::string playerWord)
+{
+	int likeness = 0;
+	for (int i = 0; i < generatedWord.length() - 1; i++)
+	{
+		if (toupper(generatedWord.at(i)) == toupper(playerWord.at(i)))
+		{
+			likeness++;
+		}
+	}
+	return likeness;
+}
