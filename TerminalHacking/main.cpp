@@ -6,6 +6,22 @@
 const int wordLength = 5;
 const int numberOfWords = 15;
 
+
+int GetLikeness(std::string guessedWord, std::string secretWord)
+{
+	int likeness = 0;
+
+	for (int i = 0; i < guessedWord.length(); i++)
+
+	{
+		if (guessedWord[i] == secretWord[i])
+			likeness++;
+	}
+
+	return likeness;
+
+}
+
 int main()
 {
 	// Seed the random number generator with the current time,
@@ -39,6 +55,24 @@ int main()
 	}
 
 	// TODO: implement the rest of the game
+
+	bool guessed_word = false;
+
+	std::string guessed;	
+
+
+	std::cout << "Type in your answer: ";
+	std::getline(std::cin, guessed);
+	
+	int wordLikeness = GetLikeness(guessed, secret);
+
+
+	if (guessed_word == true)
+		std::cout << "Welcome, Dr Shimm.";
+
+	else
+		std::cout << "TERMINAL LOCKED.. Seek out an Administrator.";
+
 
 	return 0;
 }
